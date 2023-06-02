@@ -12,12 +12,13 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.vickikbt.kmptemplate.presentation.screens.HomeScreen
 import com.vickikbt.kmptemplate.presentation.viewmodels.MainViewModel
-import koin
+import org.koin.compose.koinInject
 
 @Composable
-fun MainScreen(applicationScope: ApplicationScope, viewModel: MainViewModel = koin.get()) {
-    val greeting = viewModel.greeting.collectAsState().value
+fun MainScreen(applicationScope: ApplicationScope, ) {
+    val viewModel: MainViewModel = koinInject()
 
     Window(
         onCloseRequest = { applicationScope.exitApplication() },
@@ -29,9 +30,7 @@ fun MainScreen(applicationScope: ApplicationScope, viewModel: MainViewModel = ko
         )
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            greeting?.let {
-                Text(modifier = Modifier.align(Alignment.Center), text = it)
-            }
+            HomeScreen()
         }
     }
 }

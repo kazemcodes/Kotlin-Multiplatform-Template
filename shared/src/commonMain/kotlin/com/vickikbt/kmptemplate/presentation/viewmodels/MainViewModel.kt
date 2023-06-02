@@ -1,25 +1,12 @@
 package com.vickikbt.kmptemplate.presentation.viewmodels
 
-import com.vickikbt.kmptemplate.presentation.utils.Greeting
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
-class MainViewModel constructor(private val greetingRepository: Greeting) : KoinComponent {
+class MainViewModel : ScreenModel {
 
-    // @NativeCoroutineScope
-    private val viewModelScope = CoroutineScope(Dispatchers.Default)
-
-    private val _greeting = MutableStateFlow<String?>(null)
-    val greeting get() = _greeting
-
-    init {
-        greetings()
-    }
-
-    private fun greetings() = viewModelScope.launch {
-        _greeting.value = greetingRepository.greet()
-    }
 }

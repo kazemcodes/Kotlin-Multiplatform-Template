@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.sqlDelight.plugin)
+    alias(libs.plugins.moko)
+    alias(libs.plugins.compose.desktop.plugin)
     // alias(libs.plugins.nativeCocoapod)
 }
 
@@ -32,8 +34,16 @@ kotlin {
 
     sourceSets {
         sourceSets["commonMain"].dependencies {
-            api(libs.koin.core)
+            api(compose.ui)
+            api(compose.runtime)
+            api(compose.material3)
+            api(compose.animation)
+            api(compose.animationGraphics)
+            api(compose.foundation)
+            api(compose.materialIconsExtended)
 
+            api(libs.koin.core)
+            api(libs.koin.compose.core)
             api(libs.ktor.core)
             api(libs.ktor.cio)
             implementation(libs.ktor.contentNegotiation)
@@ -47,10 +57,19 @@ kotlin {
 
             implementation(libs.multiplatformSettings.noArg)
             implementation(libs.multiplatformSettings.coroutines)
+            implementation(libs.multiplatformSettings.serialization)
+            implementation(libs.multiplatformSettings.core)
 
             api(libs.napier)
 
             implementation(libs.kotlinX.dateTime)
+
+
+            implementation(libs.voyager.core)
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+
+            implementation(libs.moko.core)
         }
 
         sourceSets["commonTest"].dependencies {
@@ -59,10 +78,10 @@ kotlin {
 
         sourceSets["androidMain"].dependencies {
             implementation(libs.sqlDelight.android)
+            api(libs.koin.android)
+            api(libs.koin.compose.android)
         }
 
-        sourceSets["androidTest"].dependencies {
-        }
 
         sourceSets["iOSMain"].dependencies {
             implementation(libs.sqlDelight.native)

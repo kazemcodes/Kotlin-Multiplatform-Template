@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
+    alias(libs.plugins.compose.desktop.plugin)
 }
 
 android {
@@ -43,12 +44,11 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.androidX.core)
 
-    implementation(libs.material)
+    implementation(compose.material3)
 
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material)
-    implementation(libs.compose.tooling)
-    implementation(libs.compose.runtime)
+    implementation(compose.ui)
+    implementation(compose.uiTooling)
+    implementation(compose.runtime)
     implementation(libs.compose.util)
     implementation(libs.compose.activity)
 
@@ -56,7 +56,7 @@ dependencies {
 
     // Koin-Dependency injection
     implementation(libs.koin.android)
-    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.android)
 
     // Compose Navigation-Navigation between various screens
     implementation(libs.navigation.compose)

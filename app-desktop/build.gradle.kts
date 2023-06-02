@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":shared"))
 
     implementation(compose.desktop.currentOs)
+    implementation(libs.koin.compose.core)
 
     testImplementation(libs.kotlin.test)
     testImplementation(libs.turbine)
