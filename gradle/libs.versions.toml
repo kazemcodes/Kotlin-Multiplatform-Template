@@ -170,3 +170,4 @@ test-runner = { module = "androidx.test:runner", version.ref = "test" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 moko-core = { module = "dev.icerock.moko:resources", version.ref  = "moko" }
+moko-compose = { module = "dev.icerock.moko:resources-compose", version.ref  = "moko" }

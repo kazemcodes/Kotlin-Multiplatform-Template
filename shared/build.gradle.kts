@@ -70,6 +70,7 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
 
             implementation(libs.moko.core)
+            implementation(libs.moko.compose)
         }
 
         sourceSets["commonTest"].dependencies {
