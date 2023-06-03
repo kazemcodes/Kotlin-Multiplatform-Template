@@ -17,85 +17,117 @@ android {
         minSdk = 21
         targetSdk = compileSdk
     }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility(ProjectConfig.androidJvmTarget)
+        targetCompatibility(ProjectConfig.androidJvmTarget)
+    }
+
 }
-
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = ProjectConfig.desktopJvmTarget.toString()
+    }
+}
 kotlin {
-    android()
+    jvmToolchain(ProjectConfig.toolChain)
+    android {
+        compilations {
+            all {
+                kotlinOptions.jvmTarget = ProjectConfig.androidJvmTarget.toString()
+            }
+        }
+    }
+    jvm("desktop") {
+        compilations {
+            all {
+                kotlinOptions.jvmTarget = ProjectConfig.desktopJvmTarget.toString()
+            }
+        }
+    }
 
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
+
+    val iosTarget: (kotlin.String, org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget.() -> kotlin.Unit) -> org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget =
         when {
-            System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
-            System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64
+            java.lang.System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
+            java.lang.System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64
             else -> ::iosX64
         }
     iosTarget("iOS") {}
-
-    jvm()
-
     sourceSets {
-        sourceSets["commonMain"].dependencies {
-            api(compose.ui)
-            api(compose.runtime)
-            api(compose.material3)
-            api(compose.animation)
-            api(compose.animationGraphics)
-            api(compose.foundation)
-            api(compose.materialIconsExtended)
+        val commonMain by getting {
+            dependencies {
+                api(compose.ui)
+                api(compose.runtime)
+                api(compose.material3)
+                api(compose.animation)
+                api(compose.animationGraphics)
+                api(compose.foundation)
+                api(compose.materialIconsExtended)
 
-            api(libs.koin.core)
-            api(libs.koin.compose.core)
-            api(libs.ktor.core)
-            api(libs.ktor.cio)
-            implementation(libs.ktor.contentNegotiation)
-            implementation(libs.ktor.json)
-            implementation(libs.ktor.logging)
+                api(libs.koin.core)
+                api(libs.koin.compose.core)
+                api(libs.ktor.core)
+                api(libs.ktor.cio)
+                implementation(libs.ktor.contentNegotiation)
+                implementation(libs.ktor.json)
+                implementation(libs.ktor.logging)
 
-            implementation(libs.kotlinX.serializationJson)
+                implementation(libs.kotlinX.serializationJson)
 
-            implementation(libs.sqlDelight.runtime)
-            implementation(libs.sqlDelight.coroutine)
+                implementation(libs.sqlDelight.runtime)
+                implementation(libs.sqlDelight.coroutine)
 
-            implementation(libs.multiplatformSettings.noArg)
-            implementation(libs.multiplatformSettings.coroutines)
-            implementation(libs.multiplatformSettings.serialization)
-            implementation(libs.multiplatformSettings.core)
+                implementation(libs.multiplatformSettings.noArg)
+                implementation(libs.multiplatformSettings.coroutines)
+                implementation(libs.multiplatformSettings.serialization)
+                implementation(libs.multiplatformSettings.core)
 
-            api(libs.napier)
+                api(libs.napier)
 
-            implementation(libs.kotlinX.dateTime)
+                implementation(libs.kotlinX.dateTime)
 
 
-            implementation(libs.voyager.core)
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.tabNavigator)
+                implementation(libs.voyager.core)
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.tabNavigator)
 
-            implementation(libs.moko.core)
-            implementation(libs.moko.compose)
+                implementation(libs.moko.core)
+                implementation(libs.moko.compose)
+            }
         }
 
-        sourceSets["commonTest"].dependencies {
-            implementation(libs.kotlin.test)
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.sqlDelight.android)
+                api(libs.koin.android)
+                api(libs.koin.compose.android)
+            }
         }
 
-        sourceSets["androidMain"].dependencies {
-            implementation(libs.sqlDelight.android)
-            api(libs.koin.android)
-            api(libs.koin.compose.android)
+        val iOSMain by getting {
+            dependencies {
+                implementation(libs.sqlDelight.native)
+            }
+        }
+        val iOSTest by getting {
+            dependencies {
+            }
         }
 
-
-        sourceSets["iOSMain"].dependencies {
-            implementation(libs.sqlDelight.native)
+        val desktopMain by getting {
+            dependencies {
+                implementation(libs.sqlDelight.jvm)
+            }
         }
-
-        sourceSets["iOSTest"].dependencies {
-        }
-
-        sourceSets["jvmMain"].dependencies {
-            implementation(libs.sqlDelight.jvm)
-        }
-
-        sourceSets["jvmTest"].dependencies {
+        val desktopTest by getting {
+            dependencies {
+            }
         }
     }
 }
@@ -103,6 +135,6 @@ kotlin {
 sqldelight {
     database(name = "AppDatabase") {
         packageName = "com.vickikbt.kmptemplate.data.cache.sqldelight"
-        sourceFolders = listOf("kotlin")
+        sourceFolders = kotlin.collections.listOf("kotlin")
     }
 }
